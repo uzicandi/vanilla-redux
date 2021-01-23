@@ -1,57 +1,31 @@
 import { createStore } from 'redux';
-// store = data를 넣는곳 = state 넣는곳을 생성함.
-// state ? 어플리케이션에서 바뀌는 data
 
-const add = document.getElementById('add');
-const minus = document.getElementById('minus');
-const number = document.querySelector('span');
+const form = document.querySelector('form');
+const input = document.querySelector('input');
 
-number.innerText = 0;
+const ADD_TODO = 'ADD_TODO';
+const DELETE_TODO = 'DELETE_TODO';
 
-// 오타방지를 위한 변수 선언
-const ADD = 'ADD';
-const MINUS = 'MINUS';
-
-const countModifier = (count = 0, action) => {
-  // if (action.type === 'ADD') {
-  //   return count + 1;
-  // } else if (action.type === 'MINUS') {
-  //   return count - 1;
-  // } else {
-  //   return count;
-  // }
-
+const reducer = (state = [], action) => {
+  console.log(action);
   switch (action.type) {
-    case ADD:
-      return count + 1;
-    case MINUS:
-      return count - 1;
+    case ADD_TODO:
+      return [...state, { text: action.text, id: Date.now() }]; // Never Mutate State. Return New State.
+    case DELETE_TODO:
+      return [];
     default:
-      return count;
+      return state;
   }
-
-  /**
-   * = reducer
-   * 1. 데이터를 바꿔줌 (modify state)
-   * 2. return하는 것은 우리 어플리케이션의 데이터임
-   * 3. 데이터를 바꿀 수 있는 유일한 함수 => 데이터가 한 곳에 있게 됨
-   */
 };
-const countStore = createStore(countModifier); // createStore는 Reducer가 필요함
+const store = createStore(reducer);
 
-const onChange = () => {
-  number.innerText = countStore.getState();
+store.subscribe(() => console.log(store.getState()));
+
+const onSubmit = e => {
+  e.preventDefault();
+  const toDo = input.value;
+  input.value = '';
+  store.dispatch({ type: ADD_TODO, text: toDo });
 };
 
-countStore.subscribe(onChange);
-
-const handleAdd = () => {
-  countStore.dispatch({ type: ADD });
-};
-
-const handleMinus = () => {
-  countStore.dispatch({ type: MINUS });
-};
-
-add.addEventListener('click', handleAdd);
-minus.addEventListener('click', handleMinus);
+form.addEventListener('submit', onSubmit);
