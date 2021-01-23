@@ -23,12 +23,12 @@ const deleteToDo = id => {
 };
 
 const reducer = (state = [], action) => {
-  console.log(action);
+  console.log(state, action);
   switch (action.type) {
     case ADD_TODO:
       return [...state, { text: action.text, id: Date.now() }]; // Never Mutate State. Return New State.
     case DELETE_TODO:
-      return [];
+      return state.filter(toDo => toDo.id !== parseInt(action.id));
     default:
       return state;
   }
