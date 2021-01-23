@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 
-function Home() {
+function Home({ toDos }) {
+  console.log('toDos', toDos);
   const [text, setText] = useState('');
   function onChange(e) {
     setText(e.target.value);
@@ -16,9 +18,18 @@ function Home() {
         <input type="text" value={text} onChange={onChange} />
         <button>Add</button>
       </form>
-      <ul></ul>
+      <ul>{JSON.stringify(toDos)}</ul>
     </>
   );
 }
 
-export default Home;
+function mapStateToProps(state, ownProps) {
+  /**
+   * state = redux store의 default state,
+   * ownProps = Home으로 넘어온 Props (이전 component)
+   *  */
+  console.log(state, ownProps);
+  return { toDos: state }; // Home으로 보내는 props에 추가됨
+}
+
+export default connect(mapStateToProps)(Home);
