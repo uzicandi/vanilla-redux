@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import { createAction, createReducer } from '@reduxjs/toolkit';
+import { createAction, createReducer, configureStore } from '@reduxjs/toolkit';
 
 const addToDo = createAction('ADD');
 const deleteToDo = createAction('DELETE');
@@ -29,7 +29,9 @@ const reducer = createReducer([], {
 //       return state;
 //   }
 // };
-const store = createStore(reducer);
+
+//const store = createStore(reducer);
+const store = configureStore({ reducer }); // ReduxToolkit 안써도 Redux Developer Tool을 사용하게 해줌!
 
 export const actionCreators = {
   addToDo,
