@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { actionCreators } from '../store';
 
-function Home({ toDos }) {
-  console.log('toDos', toDos);
+function Home({ toDos, addToDo }) {
   const [text, setText] = useState('');
   function onChange(e) {
     setText(e.target.value);
   }
   function onSubmit(e) {
     e.preventDefault();
+    addToDo(text);
     setText('');
   }
   return (
@@ -32,4 +33,13 @@ function mapStateToProps(state, ownProps) {
   return { toDos: state }; // Home으로 보내는 props에 추가됨
 }
 
-export default connect(mapStateToProps)(Home);
+function mapDispatchToProps(dispatch) {
+  return {
+    addToDo: text => dispatch(actionCreators.addToDo(text))
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home);
